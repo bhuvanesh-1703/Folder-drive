@@ -12,7 +12,7 @@ exports.registerUser = async (req, res) => {
     try {
         let user = await User.findOne({ email });
         if (user) {
-            return res.status(400).json({ msg: 'User already exists with this email' });
+            return res.status(400).json({success:false, message: 'User already exists with this email'});
         }
 
         user = new User({
@@ -33,6 +33,7 @@ exports.registerUser = async (req, res) => {
         );
 
         res.status(201).json({
+            success:true, message:"User registered successfully",
             token,
             user: {
                 id: user.id,
@@ -42,7 +43,7 @@ exports.registerUser = async (req, res) => {
         });
     } catch (err) {
         console.error('Registration Error:', err.message);
-        res.status(500).json({ msg: 'Server error during registration' });
+        res.status(500).json({ success:false, message: 'Server error during registration',error:err });
     }
 };
 
@@ -50,18 +51,18 @@ exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-        return res.status(400).json({ msg: 'Please enter both email and password' });
+        return res.status(400).json({ success:false,message: 'Please enter both email and password' });
     }
 
     try {
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ msg: 'User does not exist' });
+            return res.status(400).json({ success:false,message: 'User does not exist' });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ msg: 'Invalid credentials (wrong password)' });
+            return res.status(400).json({ success:false,message: 'Invalid credentials (wrong password)' });
         }
 
         const token = jwt.sign(
@@ -80,7 +81,7 @@ exports.loginUser = async (req, res) => {
         });
     } catch (err) {
         console.error('Login Error:', err.message);
-        res.status(500).json({ msg: 'Server error during login' });
+        res.status(500).json({ success:false,message: 'Server error during login',error:err });
     }
 };
 
@@ -90,6 +91,6 @@ exports.getMe = async (req, res) => {
         res.json(user);
     } catch (err) {
         console.error('Get User Profile Error:', err.message);
-        res.status(500).json({ msg: 'Server error fetching user details' });
+        res.status(500).json({ success:true,message: 'Server error fetching user details',error:err });
     }
 };

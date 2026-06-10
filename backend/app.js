@@ -12,6 +12,8 @@ app.use(cors());
 
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
+app.use('/api/register', authRoutes);
+app.use('/api/login', authRoutes);
 
 const connectDB = () => {
     const maskedUri = process.env.MONGO_URI ? process.env.MONGO_URI.replace(/:([^@]+)@/, ':****@') : 'undefined';
