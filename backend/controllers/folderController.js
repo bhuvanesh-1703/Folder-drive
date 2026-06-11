@@ -1,5 +1,5 @@
-const Folder = require("../Models/folder");
-const File = require("../Models/file");
+const Folder = require("../Models/Folder");
+const File = require("../Models/File");
 
 const deleteFolderRecursive = async (folderId) => {
   const subfolders = await Folder.find({ parentId: folderId });
