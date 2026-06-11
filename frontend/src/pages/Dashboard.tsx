@@ -37,7 +37,7 @@ interface FileItem {
   createdAt?: string;
 }
 
-const BACKEND_BASE = "http://localhost:5100";
+const BACKEND_BASE = API_URL;
 
 const Dashboard = () => {
   const navigate = useNavigate();
